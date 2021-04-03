@@ -25,39 +25,57 @@ app.get('/tables', (req, res) => {
     res.sendFile(path.join(__dirname, "tables.html"))
 });
 
+app.get('/api/tables', (req, res) => {
+    res.json(reservations);
+})
+
+app.get('/api/waitlist', (req, res) => {
+    res.json(waitData);
+})
+
+
+
 const reservations = [
   {
-    name: 'reagan',
-    email: 'reagan422440@gmail.com',
-    phone: '4403706704',
-    id: 'rrogers422'
+    customerName: 'reagan',
+    phoneNumber: '4403706704',
+    customerEmail: 'reagan422440@gmail.com',
+    customerID: 'rrogers422'
   },
   {
-    name: 'mike',
-    email: 'mikek@gmail.com',
-    phone: '543252664',
-    id: 'mkotte'
+    customerName: 'mike',
+    phoneNumber: '543252664',
+    customerEmail: 'mikek@gmail.com',
+    customerID: 'mkotte'
   }
 ];
 
 //post requests
-app.post('/api/tables', (req, res) => {
 
-    const newReservation = req.body;
+if ( reservations.length <= 5){
+    app.post('/api/tables', (req, res) => {
 
-    newReservation.routeName = newReservation.name.replace(/\s+/g, '').toLowerCase();
-    console.log(newReservation);
+        const newReservation = req.body;
 
-    reservations.push(newReservation);
-    res.json(newReservation);
-});
+        newReservation.routeName = newReservation.customerName.replace(/\s+/g, '').toLowerCase();
+        console.log(newReservation);
 
+        reservations.push(newReservation);
+        res.json(newReservation);
+    });
+}
+else{
+    app.post('/api/waitlist', (req, res) => {
+        const waitData = req.body;
 
+        // newReservation.routeName = newReservation.customerName.replace(/\s+/g, '').toLowerCase();
+        // console.log(newReservation);
 
+        reservations.push(waitData);
+        res.json(waitData)
+    });
+}
 
-// for (let i=0; i<reservations.length; i++) {
-//     if()
-// }
 
 
 app.listen(PORT, () => console.log(`App listening on PORT ${PORT}`));
